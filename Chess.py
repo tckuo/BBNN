@@ -1,16 +1,19 @@
 class Pieces:
 	def __init__(self, player=0, nextKind='0',\
-				 nowCoord=[0, 0], nextStep=[0, 0],\
-				 board=[[(0,'0') for i in range(7)] for j in range(7)]):
+				 nextStep=[0, 0], nowCoord=[0, 0]):#,\
+				 #board=[[(0,'0') for i in range(7)] for j in range(7)]):
 		self.player = player
 		self.nextKind = nextKind
 		self.move = [nextStep[0]-nowCoord[0], nextStep[1]-nowCoord[1]]
-		self.nextStep = []
-		self.nextStep[:] = nextStep[:]
-		self.board = board
+		self.movedir = [self.move[0]/abs(self.move[0]), self.move[1]/abs(self.move[1])]
+		self.nextStep = nextStep[:]
+		#self.board = board
 	def details(self):
-		return [self.player, self.nextKind]
+		return [self.player, self.nextKind, self.nowCoord, self.nextStep]
 	def moves(self):
+		'''
+		list all possible moves
+		'''
 		if self.nextKind == 'b': #bishops
 			#d_moves = []
 			#for i in range(5):
@@ -40,29 +43,47 @@ class Pieces:
 			return r_moves
 		else:
 			return [[0, 0]]
-	def checkMoves(self):
+	def checkMove(self):
 		'''
+		check the next step can be placed or not
+
 		to be finished!!!!!!!!!!!!!!!!
 		check type==int? , len==2?, move==0?, etc
 		or it can check out of the class
 		'''
-		if self.move == [6, 6]:
+		if self.move == [6, 6]: #the case must can place it, e.g. 1st piece
 			return True
-		absMove = sorted([abs(self.move[0]), abs(self.move[1])])
-		if self.nextKind == 'b':
-			if absMove[0] == absMove[1]:
-				return True
-			else:
-				return False
-		elif self.nextKind == 'n':
-			if absMove[0] * absMove[1] == 2:
-				return True
-			else:
-				return False
-		elif self.nextKind == 'r':
-			if absMove in [[0, y] for y in range(1,6)]:
-				return True
-			else:
-				return False
+		elif board[self.nextStep[0]][self.nextStep[1]][0] != 0: #place on another piece
+			return False
 		else:
-			return  False
+			absMove = sorted([abs(self.move[0]), abs(self.move[1])])
+			if self.nextKind == 'b':
+				if absMove[0] == absMove[1]:
+					#check on trace
+					x, y = self.nowCoord[0], self.nowCoord[1]
+					for l in range(1, absmove[0]):
+						x += self.movedir[0]
+						y += self.movedir[1]
+						if board[x][y][0] != 0:
+							return False
+					return True
+				else:
+					return False
+			elif self.nextKind == 'n':
+				if absMove[0] * absMove[1] == 2:
+					return True
+				else:
+					return False
+			elif self.nextKind == 'r':
+				if absMove in [[0, y] for y in range(1,6)]:
+					x, y = self.nowCoord[0], self.nowCoord[1]
+					for l in range(1, absmove[0]):
+						x += self.movedir[0]
+						y += self.movedir[1]
+						if board[x][y][0] != 0:
+							return False
+					return True
+				else:
+					return False
+			else:
+				return  False

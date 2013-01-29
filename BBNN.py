@@ -2,11 +2,11 @@ import Chess
 '''
 board has elements as (player, 'b or n')
 '''
-
+###
 # step=(column, rank)
-
+#board as global mem?
 blankboard=[[(0,'0') for i in range(7)] for j in range(7)]
-
+board=blankboard[:] 
 order=('B','n','N','b')
 '''
 blankborad has elements as (player, 'b or n')
@@ -73,7 +73,6 @@ def checkwin(board):
 					rankocc[player][rank-1].append(column)
 					if column-rank>=-2 and column-rank<=2:
 						slashocc[player][column-rank+2].append(column)
-					if column+rank>=5 and column+rank<=9:
 						slantocc[player][column+rank-5].append(column)
 
 	for player in [1,2]:
@@ -163,7 +162,6 @@ print 'type \'H\' for Help'
 #nowdraw=1
 nowdraw=0
 nowCoord=[0,0]
-print 'NC', nowCoord
 while True:
 	inputKey=raw_input('Please draw on a square: ')
 	check = 1
@@ -189,46 +187,34 @@ while True:
 				inputKey=raw_input('This function is not finished. Please draw on a square: ')
 
 	nextStep = [int(inputKey[0]),int(inputKey[1])]
-	print 'NC', nowCoord
-	print 'NS', nextStep
 	diff = [0, 0]
 	if nowCoord == [0,0]:
 		diff = [6,6]
 	else:
 		diff[0] = nextStep[0] - nowCoord[0]
 		diff[1] = nextStep[1] - nowCoord[1]
-	print 'diff', diff
-	print nowdraw
 	if nowdraw==0:
 		nextDraw = Chess.Pieces(1, 'b', diff)
-		print '0'
-		if nextDraw.checkMoves():
+		if nextDraw.checkMove():
 			drawb(1, nextStep, board)
-			print 'B'
 			nowdraw=(nowdraw+1)%4
 			nowCoord[0:] = nextStep[0:]
 	elif nowdraw==1:
 		nextDraw = Chess.Pieces(2, 'n', diff)
-		print 1
-		if nextDraw.checkMoves():
+		if nextDraw.checkMove():
 			drawn(2, nextStep, board)
-			print 'n'
 			nowdraw=(nowdraw+1)%4
 			nowCoord[0:] = nextStep[0:]
 	elif nowdraw==2:
 		nextDraw = Chess.Pieces(1, 'n', diff)
-		print 2
-		if nextDraw.checkMoves():
+		if nextDraw.checkMove():
 			drawn(1, nextStep, board)
-			print 'N'
 			nowdraw=(nowdraw+1)%4
 			nowCoord[0:] = nextStep[0:]
 	elif nowdraw==3:
 		nextDraw = Chess.Pieces(2, 'b', diff)
-		print 3
-		if nextDraw.checkMoves():
+		if nextDraw.checkMove():
 			drawb(2, nextStep, board)
-			print 'b'
 			nowdraw=(nowdraw+1)%4
 			nowCoord[:] = nextStep[:]
 	else:
