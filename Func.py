@@ -1,4 +1,3 @@
-
 def drawb(player, step, board):
 	#laststep=step
 	board[step[0]][step[1]]=(player,'b')

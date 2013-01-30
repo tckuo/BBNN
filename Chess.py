@@ -1,13 +1,13 @@
 class Pieces:
 	def __init__(self, player=0, nextKind='0',\
-				 nextStep=[0, 0], nowCoord=[0, 0]):#,\
-				 #board=[[(0,'0') for i in range(7)] for j in range(7)]):
+				 nextStep=[0, 0], nowCoord=[0, 0],\
+				 board=[[(0,'0') for i in range(7)] for j in range(7)]):
 		self.player = player
 		self.nextKind = nextKind
+		self.nowCoord = nowCoord
 		self.move = [nextStep[0]-nowCoord[0], nextStep[1]-nowCoord[1]]
-		self.movedir = [self.move[0]/abs(self.move[0]), self.move[1]/abs(self.move[1])]
 		self.nextStep = nextStep[:]
-		#self.board = board
+		self.board = board
 	def details(self):
 		return [self.player, self.nextKind, self.nowCoord, self.nextStep]
 	def moves(self):
@@ -53,7 +53,7 @@ class Pieces:
 		'''
 		if self.move == [6, 6]: #the case must can place it, e.g. 1st piece
 			return True
-		elif board[self.nextStep[0]][self.nextStep[1]][0] != 0: #place on another piece
+		elif self.board[self.nextStep[0]][self.nextStep[1]][0] != 0: #place on another piece
 			return False
 		else:
 			absMove = sorted([abs(self.move[0]), abs(self.move[1])])
@@ -61,10 +61,11 @@ class Pieces:
 				if absMove[0] == absMove[1]:
 					#check on trace
 					x, y = self.nowCoord[0], self.nowCoord[1]
-					for l in range(1, absmove[0]):
-						x += self.movedir[0]
-						y += self.movedir[1]
-						if board[x][y][0] != 0:
+					moveDir = [self.move[0]/abs(self.move[0]), self.move[1]/abs(self.move[1])]
+					for l in range(1, absMove[0]):
+						x += moveDir[0]
+						y += moveDir[1]
+						if self.board[x][y][0] != 0:
 							return False
 					return True
 				else:
@@ -75,12 +76,16 @@ class Pieces:
 				else:
 					return False
 			elif self.nextKind == 'r':
-				if absMove in [[0, y] for y in range(1,6)]:
+				if absMove in [[0, yy] for yy in range(1,6)]:
 					x, y = self.nowCoord[0], self.nowCoord[1]
-					for l in range(1, absmove[0]):
-						x += self.movedir[0]
-						y += self.movedir[1]
-						if board[x][y][0] != 0:
+					if self.move[0] == 0:
+						moveDir=[0, self.move[1]/abs(self.move[1])]
+					else:
+						moveDir=[self.move[0]/abs(self.move[0]), 0]
+					for l in range(1, absMove[0]):
+						x += moveDir[0]
+						y += moveDir[1]
+						if self.board[x][y][0] != 0:
 							return False
 					return True
 				else:
