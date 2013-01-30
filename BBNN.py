@@ -63,7 +63,7 @@ while True:
 			try:
 				int(inputKey[0])
 				int(inputKey[1])
-				if 0 < int(inputKey[0]) < 7 and 0 < int(inputKey[0]) < 7:
+				if 0 < int(inputKey[0]) < 7 and 0 < int(inputKey[1]) < 7:
 					check = 0
 				else:
 					inputKey=raw_input('Input out of index. Please draw on a square: ')
@@ -76,19 +76,19 @@ while True:
 		if nextDraw.checkMove():
 			drawb(1, nextStep, board)
 			nowdraw=(nowdraw+1)%4
-			nowCoord[0:] = nextStep[0:]
+			nowCoord[:] = nextStep[:]
 	elif nowdraw==1:
 		nextDraw = Chess.Pieces(2, 'n', nextStep, nowCoord, board)
 		if nextDraw.checkMove():
 			drawn(2, nextStep, board)
 			nowdraw=(nowdraw+1)%4
-			nowCoord[0:] = nextStep[0:]
+			nowCoord[:] = nextStep[:]
 	elif nowdraw==2:
 		nextDraw = Chess.Pieces(1, 'n', nextStep, nowCoord, board)
 		if nextDraw.checkMove():
 			drawn(1, nextStep, board)
 			nowdraw=(nowdraw+1)%4
-			nowCoord[0:] = nextStep[0:]
+			nowCoord[:] = nextStep[:]
 	elif nowdraw==3:
 		nextDraw = Chess.Pieces(2, 'b', nextStep, nowCoord, board)
 		if nextDraw.checkMove():
