@@ -92,3 +92,122 @@ class Pieces:
 					return False
 			else:
 				return  False
+	def checkAMoves(self):
+		'''
+		check all available moves
+		'''
+		moveList = []
+		if self.nowCoord == [0, 0]: #1st move
+			for i in range(1,7):
+				for j in range(1,7):
+					moveList.append([i, j])
+		else:			
+			if self.nextKind == 'b':
+				x0, y0 = self.nowCoord[0], self.nowCoord[1]
+				i = 1
+				while i < 6:
+					x, y = x0 + i, y0 + i
+					if 0 < x < 7 and 0 < y < 7:
+						if self.board[x][y][0] == 0:
+							moveList.append([x, y])
+						else:
+							break
+					else:
+						break
+					i += 1
+				i = 1
+				while i < 6:
+					x, y = x0 - i, y0 + i
+					if 0 < x < 7 and 0 < y < 7:
+						if self.board[x][y][0] == 0:
+							moveList.append([x, y])
+						else:
+							break
+					else:
+						break
+					i += 1
+				i = 1
+				while i < 6:
+					x, y = x0 - i, y0 - i
+					if 0 < x < 7 and 0 < y < 7:
+						if self.board[x][y][0] == 0:
+							moveList.append([x, y])
+						else:
+							break
+					else:
+						break
+					i += 1
+				i = 1
+				while i < 6:
+					x, y = x0 + i, y0 - i
+					if 0 < x < 7 and 0 < y < 7:
+						if self.board[x][y][0] == 0:
+							moveList.append([x, y])
+						else:
+							break
+					else:
+						break
+					i += 1
+			elif self.nextKind == 'n':
+				x0, y0 = self.nowCoord[0], self.nowCoord[1]
+				for s1 in [-1, 1]:
+					for s2 in [-1, 1]:
+						x1, y1 = x0 + s1, y0 + s2*2
+						x2, y2 = x0 + s1*2, y0 + s2
+						if 0 < x1 < 7 and 0 < y1 < 7:
+							if self.board[x1][y1][0] == 0:
+								moveList.append([x1, y1])
+						if 0 < x2 < 7 and 0 < y2 < 7:
+							if self.board[x2][y2][0] == 0:
+								moveList.append([x2, y2])
+			elif self.nextKind == 'r':
+				x0, y0 = self.nowCoord[0], self.nowCoord[1]
+				i = 1
+				while i < 6:
+					x, y = x0 + i, y0
+					if 0 < x < 7 and 0 < y < 7:
+						if self.board[x][y][0] == 0:
+							moveList.append([x, y])
+						else:
+							break
+					else:
+						break
+					i += 1
+				i = 1
+				while i < 6:
+					x, y = x0, y0 + i
+					if 0 < x < 7 and 0 < y < 7:
+						if self.board[x][y][0] == 0:
+							moveList.append([x, y])
+						else:
+							break
+					else:
+						break
+					i += 1
+				i = 1
+				while i < 6:
+					x, y = x0 - i, y0
+					if 0 < x < 7 and 0 < y < 7:
+						if self.board[x][y][0] == 0:
+							moveList.append([x, y])
+						else:
+							break
+					else:
+						break
+					i += 1
+				i = 1
+				while i < 6:
+					x, y = x0, y0 - i
+					if 0 < x < 7 and 0 < y < 7:
+						if self.board[x][y][0] == 0:
+							moveList.append([x, y])
+						else:
+							break
+					else:
+						break
+					i += 1
+			else:
+				return None	
+		return moveList
+
+
