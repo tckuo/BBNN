@@ -131,9 +131,9 @@ class Pieces:
 	def checkMove(self):
 		'''
 		check next step can be placed or not
-		if yes: return True
+		if yes: return 1
 		if not: return a list available moves
-		if no available move:
+		if no available move: return 0
 		'''
 		aMoves = self.availMoves()
 		if len(aMoves) == 0:
@@ -142,3 +142,5 @@ class Pieces:
 			return 1
 		else:
 			return aMoves
+	def draw(self):
+		self.board[self.nextStep[0]][self.nextStep[1]] = (self.player, self.nextKind)

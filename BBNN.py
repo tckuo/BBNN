@@ -59,7 +59,8 @@ while True:
 		nextDraw = Chess.Pieces(1, 'b', nextStep, nowCoord, board)
 		cM = nextDraw.checkMove()
 		if cM==1:
-			drawb(1, nextStep, board)
+			nextDraw.draw()
+			#drawb(1, nextStep, board)
 			nowdraw=(nowdraw+1)%4
 			nowCoord[:] = nextStep[:]
 		elif cM==0:
@@ -71,7 +72,8 @@ while True:
 		nextDraw = Chess.Pieces(2, 'n', nextStep, nowCoord, board)
 		cM = nextDraw.checkMove()
 		if cM==1:
-			drawn(2, nextStep, board)
+			nextDraw.draw()
+			#drawn(2, nextStep, board)
 			nowdraw=(nowdraw+1)%4
 			nowCoord[:] = nextStep[:]
 		elif cM==0:
@@ -83,7 +85,8 @@ while True:
 		nextDraw = Chess.Pieces(1, 'n', nextStep, nowCoord, board)
 		cM = nextDraw.checkMove()
 		if cM==1:
-			drawn(1, nextStep, board)
+			nextDraw.draw()
+			#drawn(1, nextStep, board)
 			nowdraw=(nowdraw+1)%4
 			nowCoord[:] = nextStep[:]
 		elif cM==0:
@@ -95,7 +98,8 @@ while True:
 		nextDraw = Chess.Pieces(2, 'b', nextStep, nowCoord, board)
 		cM = nextDraw.checkMove()
 		if cM==1:
-			drawb(2, nextStep, board)
+			nextDraw.draw()
+			#drawb(2, nextStep, board)
 			nowdraw=(nowdraw+1)%4
 			nowCoord[:] = nextStep[:]
 		elif cM==0:
