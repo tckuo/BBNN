@@ -12,6 +12,17 @@ order=('B','n','N','b')
 '''
 blankborad has elements as (player, 'b or n')
 '''
+
+
+#unoccupied=[]
+#for i in [1,7]:
+#	for j in [1,7]:
+#		unoccupied.append(str(i)+str(j))
+#'''
+#unoccupied is ['11', '12', ...,'66'], shows unoccupied square in string
+#'''
+
+
 nowdraw=0
 
 # step=(column, rank)
@@ -25,6 +36,11 @@ nowdraw=0
 board=blankboard[:]
 showboard(board)
 print 'type \'H\' for Help'
+#x=raw_input('Please draw on a square: ')
+#firststep=(int(x[0]),int(x[1]))
+#board[firststep[0]][firststep[1]]=(1,'b')
+#showboard(board)
+#nowdraw=1
 nowdraw=0
 nowCoord=[0,0]
 while True:
@@ -109,3 +125,4 @@ while True:
 	if checkwin(board) != None:
 		print 'Player',checkwin(board),'wins!'
 		break
+	#nowdraw=(nowdraw+1)%4
