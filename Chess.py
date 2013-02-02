@@ -1,6 +1,6 @@
 class Pieces:
 	def __init__(self, player=0, nextKind='0',\
-				 nextStep=[0, 0], nowCoord=[0, 0],\
+				 nowCoord=[0, 0], nextStep=[0, 0],\
 				 board=[[(0,'0') for i in range(7)] for j in range(7)]):
 		self.player = player
 		self.nextKind = nextKind

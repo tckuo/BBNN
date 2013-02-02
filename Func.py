@@ -105,8 +105,10 @@ def checkwin(board):
 
 def showboard(board):   # board has elements as (player, 'b or n')
 	#lastcor={(1,'b'):'  B* ',(1,'n'):'  N* ',(2,'b'):' (b)*',(2,'n'):' (n)*'}
-	showcor={(0,'0'):'     ',(1,'b'):'  B  ',
-			 (1,'n'):'  N  ',(2,'b'):' (b) ',(2,'n'):' (n) '}
+	#showcor={(0,'0'):'     ',(1,'b'):'  B  ',
+	#		 (1,'n'):'  N  ',(2,'b'):' (b) ',(2,'n'):' (n) '}
+	showcor={(1,'b'):'  B  ', (1,'n'):'  N  ',(1,'r'):'  R  ',
+			 (2,'b'):' (b) ', (2,'n'):' (n) ',(0,'0'):'     ',}
 	middle=''
 	for i in range(6,1,-1):
 		onerank='\t'+str(i)+'|'
@@ -125,11 +127,14 @@ def showboard(board):   # board has elements as (player, 'b or n')
 
 def showPlayer(nowDraw):
 	if nowDraw == 0:
-		print 'Player 1 plays with Bishop'
+		print 'Player 1 plays as Bishop'
 	elif nowDraw == 1:
-		print 'Player 2 plays with Knight'
+		print 'Player 2 plays as Knight'
 	elif nowDraw == 2:
-		print 'Player 1 plays with Knight'
+		print 'Player 1 plays as Knight'
 	elif nowDraw == 3:
-		print 'Player 2 plays with Bishop'
-
+		print 'Player 2 plays as Bishop'
+	elif nowDraw in [4,6]:
+		print 'Player 1 plays as Rook'
+	else:
+		print 'What?'
