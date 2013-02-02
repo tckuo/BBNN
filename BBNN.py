@@ -12,7 +12,7 @@ order=('B','n','N','b')
 '''
 blankborad has elements as (player, 'b or n')
 '''
-nowdraw=0
+nowDraw=0
 
 # step=(column, rank)
 
@@ -23,11 +23,13 @@ nowdraw=0
 
 
 board=blankboard[:]
+clearUp()
 showboard(board)
 print 'type \'H\' for Help'
-nowdraw=0
+nowDraw=0
 nowCoord=[0,0]
 while True:
+	showPlayer(nowDraw)
 	inputKey=raw_input('Please draw on a square: ')
 	check = 1
 	while check == 1:
@@ -55,61 +57,80 @@ while True:
 				inputKey=raw_input('Invalid input. Please draw on a square: ')
 
 	nextStep = [int(inputKey[0]),int(inputKey[1])]
-	if nowdraw==0:
+	if nowDraw==0:
 		nextDraw = Chess.Pieces(1, 'b', nextStep, nowCoord, board)
 		cM = nextDraw.checkMove()
 		if cM==1:
 			nextDraw.draw()
 			#drawb(1, nextStep, board)
-			nowdraw=(nowdraw+1)%4
+			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
+			clearUp()
+			showboard(board)
 		elif cM==0:
-			nowdraw=(nowdraw+1)%4
+			nowDraw=(nowDraw+1)%4
+			clearUp()
+			showboard(board)
 		else:
 			print 'Invalid move! The available moves are:'
 			print cM
-	elif nowdraw==1:
+	elif nowDraw==1:
 		nextDraw = Chess.Pieces(2, 'n', nextStep, nowCoord, board)
 		cM = nextDraw.checkMove()
 		if cM==1:
 			nextDraw.draw()
 			#drawn(2, nextStep, board)
-			nowdraw=(nowdraw+1)%4
+			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
+			clearUp()
+			showboard(board)
 		elif cM==0:
-			nowdraw=(nowdraw+1)%4
+			nowDraw=(nowDraw+3)%4
+			clearUp()
+			showboard(board)
 		else:
 			print 'Invalid move! The available moves are:'
 			print cM
-	elif nowdraw==2:
+	elif nowDraw==2:
 		nextDraw = Chess.Pieces(1, 'n', nextStep, nowCoord, board)
 		cM = nextDraw.checkMove()
 		if cM==1:
 			nextDraw.draw()
 			#drawn(1, nextStep, board)
-			nowdraw=(nowdraw+1)%4
+			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
+			clearUp()
+			showboard(board)
 		elif cM==0:
-			nowdraw=(nowdraw+1)%4
+			nowDraw=(nowDraw+1)%4
+			clearUp()
+			showboard(board)
 		else:
 			print 'Invalid move! The available moves are:'
 			print cM
-	elif nowdraw==3:
+	elif nowDraw==3:
 		nextDraw = Chess.Pieces(2, 'b', nextStep, nowCoord, board)
 		cM = nextDraw.checkMove()
 		if cM==1:
 			nextDraw.draw()
 			#drawb(2, nextStep, board)
-			nowdraw=(nowdraw+1)%4
+			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
+			clearUp()
+			showboard(board)
 		elif cM==0:
-			nowdraw=(nowdraw+1)%4
+			nowDraw=(nowDraw+3)%4
+			clearUp()
+			showboard(board)
 		else:
 			print 'Invalid move! The available moves are:'
 			print cM
 	else:
 		break
-	showboard(board)
+	#clearUp()
+	#showboard(board)
 	if checkwin(board) != None:
+		clearUp()
+		showboard(board)
 		print 'Player',checkwin(board),'wins!'
 		break

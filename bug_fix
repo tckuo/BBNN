@@ -1,3 +1,5 @@
+#copy paste prob
+
 Please draw on a square: 66
 Traceback (most recent call last):
   File "BBNN.py", line 102, in <module>

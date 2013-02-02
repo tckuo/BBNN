@@ -1,3 +1,5 @@
+from platform import uname
+from os import system
 '''
 def drawb(player, step, board):
 	#laststep=step
@@ -8,26 +10,11 @@ def drawn(player, step, board):
 	board[step[0]][step[1]]=(player,'n')
 '''
 
-def showboard(board):   # board has elements as (player, 'b or n')
-	#lastcor={(1,'b'):'  B* ',(1,'n'):'  N* ',(2,'b'):' (b)*',(2,'n'):' (n)*'}
-	showcor={(0,'0'):'     ',(1,'b'):'  B  ',
-			 (1,'n'):'  N  ',(2,'b'):' (b) ',(2,'n'):' (n) '}
-	middle=''
-	for i in range(6,1,-1):
-		onerank='\t'+str(i)+'|'
-		for j in range(1,7):
-			onerank=onerank+showcor[board[j][i]]+'|'
-		middle=(middle+'\t |'+'     |'*6+'\n'+onerank
-				+'\n\t |-----+-----+-----+-----+-----+-----|\n')
-	lastrank='\t1|'
-	for j in range(1,7):
-		lastrank=lastrank+showcor[board[j][1]]+'|'
-	boardgraph=('\t .-----.-----.-----.-----.-----.-----.\n'+middle
-				+'\t |'+'     |'*6+'\n'+lastrank
-				+'\n\t \'-----\'-----\'-----\'-----\'-----\'-----\''
-				+'\n\t    1     2     3     4     5     6    ')
-	print boardgraph
-
+def clearUp():
+	if uname()[0].lower().startswith('linux'):
+		system("clear")
+	elif uname()[0].lower().startswith('win'):
+		system("cls")
 
 def checkwin(board):
     columnocc={1:[[],[],[],[],[],[]],2:[[],[],[],[],[],[]]}
@@ -115,4 +102,34 @@ def checkwin(board):
                                     return player
                     else:
                         return player
+
+def showboard(board):   # board has elements as (player, 'b or n')
+	#lastcor={(1,'b'):'  B* ',(1,'n'):'  N* ',(2,'b'):' (b)*',(2,'n'):' (n)*'}
+	showcor={(0,'0'):'     ',(1,'b'):'  B  ',
+			 (1,'n'):'  N  ',(2,'b'):' (b) ',(2,'n'):' (n) '}
+	middle=''
+	for i in range(6,1,-1):
+		onerank='\t'+str(i)+'|'
+		for j in range(1,7):
+			onerank=onerank+showcor[board[j][i]]+'|'
+		middle=(middle+'\t |'+'     |'*6+'\n'+onerank
+				+'\n\t |-----+-----+-----+-----+-----+-----|\n')
+	lastrank='\t1|'
+	for j in range(1,7):
+		lastrank=lastrank+showcor[board[j][1]]+'|'
+	boardgraph=('\t .-----.-----.-----.-----.-----.-----.\n'+middle
+				+'\t |'+'     |'*6+'\n'+lastrank
+				+'\n\t \'-----\'-----\'-----\'-----\'-----\'-----\''
+				+'\n\t    1     2     3     4     5     6    ')
+	print boardgraph
+
+def showPlayer(nowDraw):
+	if nowDraw == 0:
+		print 'Player 1 plays with Bishop'
+	elif nowDraw == 1:
+		print 'Player 2 plays with Knight'
+	elif nowDraw == 2:
+		print 'Player 1 plays with Knight'
+	elif nowDraw == 3:
+		print 'Player 2 plays with Bishop'
 

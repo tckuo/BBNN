@@ -8,8 +8,9 @@ class Pieces:
 		self.move = [nextStep[0]-nowCoord[0], nextStep[1]-nowCoord[1]]
 		self.nextStep = nextStep[:]
 		self.board = board
-	def details(self):
-		return [self.player, self.nextKind, self.nowCoord, self.nextStep]
+#	def details(self):
+#		#return [self.player, self.nextKind, self.nowCoord, self.nextStep]
+#		return "Now playing: Player %d with piece %s"%(self.player, self.nextKind)
 	def availMoves(self):
 		'''
 		list all available moves
