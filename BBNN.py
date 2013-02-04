@@ -23,6 +23,7 @@ nowDraw=0
 
 
 board=blankboard[:]
+gameSave=[]
 clearUp()
 showboard(board)
 print 'type \'H\' for Help'
@@ -35,7 +36,47 @@ while True:
 	check = 1
 	while check == 1:
 		if inputKey == 'S':		#Save
-			inputKey=raw_input('The function \'Save\' is not finished. Please draw on a square: ')
+			#print gameSave
+			f = open("bbnn.sav", "w")
+			for i in range(len(gameSave)):
+				f.write('%s\n'%gameSave[i])
+			f.close()
+			#inputKey=raw_input('The function \'Save\' is not finished. Please draw on a square: ')
+			inputKey=raw_input('Game saved. Please draw on a square: ')
+		elif inputKey == 'L':		#Load, not finished
+			f = open("bbnn.sav", "r")
+			savList = f.read().split()
+			print savList
+			f.close()
+			#inputKey=raw_input('The function \'Save\' is not finished. Please draw on a square: ')
+			for i in range(len(savList)):
+				move = savList[i]
+				Chess.Pieces(int(move[0]), move[1], [0, 0], [int(move[2]), int(move[3])], board).draw()
+			if move[1] == 'r':
+				move = savList[-2]
+				if move[0:2] == '1b': #nowDraw =  move's nd +1
+					nowDraw = 2
+				elif move[0:2] == '2n':
+					nowDraw = 3
+				elif move[0:2] == '1n':
+					nowDarw = 0
+				elif move[0:2] == '2b':
+					nowDraw = 1
+
+			elif move[0:2] == '1b': #nowDraw = last move's nd +1
+				nowDraw = 1
+			elif move[0:2] == '2n':
+				nowDraw = 2
+			elif move[0:2] == '1n':
+				nowDarw = 3
+			elif move[0:2] == '2b':
+				nowDraw = 0
+			clearUp()
+			showboard(board)
+			showPlayer(nowDraw)
+			del move
+			del savList
+			inputKey=raw_input('Game Loaded. Please draw on a square: ')		
 		elif inputKey == 'R':	#change to Rook
 			#inputKey=raw_input('The function \'Rook\' is not finished. Please draw on a square: ')
 			nextDraw = Chess.Pieces(1, 'r', nowCoord)
@@ -75,6 +116,7 @@ while True:
 		cM = nextDraw.checkMove()
 		if cM==1:
 			nextDraw.draw()
+			nextDraw.save(gameSave)
 			#drawb(1, nextStep, board)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
@@ -92,6 +134,7 @@ while True:
 		cM = nextDraw.checkMove()
 		if cM==1:
 			nextDraw.draw()
+			nextDraw.save(gameSave)
 			#drawn(2, nextStep, board)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
@@ -109,6 +152,7 @@ while True:
 		cM = nextDraw.checkMove()
 		if cM==1:
 			nextDraw.draw()
+			nextDraw.save(gameSave)
 			#drawn(1, nextStep, board)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
@@ -126,6 +170,7 @@ while True:
 		cM = nextDraw.checkMove()
 		if cM==1:
 			nextDraw.draw()
+			nextDraw.save(gameSave)
 			#drawb(2, nextStep, board)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
@@ -143,6 +188,7 @@ while True:
 		cM = nextDraw.checkMove()
 		if cM==1:
 			nextDraw.draw()
+			nextDraw.save(gameSave)
 			if checkwin(board) == None:
 				nowDraw=(nowDraw+1)%4
 				nowCoord[:] = nextStep[:]
@@ -150,9 +196,11 @@ while True:
 				showboard(board)
 				rook = 0
 			else: #use Rook to win
-				#Erase the Rook
-				nextDraw = Chess.Pieces(0, '0', [0, 0], nextStep, board)
-				nextDraw.draw()
+				##Erase the Rook on the board
+				#nextDraw = Chess.Pieces(0, '0', [0, 0], nextStep, board)
+				#nextDraw.draw()
+				Chess.Pieces(0, '0', [0, 0], nextStep, board).draw()
+				gameSave.pop(len(gameSave) - 1)
 				print 'Illigal move! You can not win the game by Rook.'
 				nowDraw -= 4
 		#checked before

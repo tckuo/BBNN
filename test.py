@@ -1,6 +1,9 @@
 import Chess
 
-Chess.Pieces(0,'1',[0,0],[1,1]).draw()
+f=open('t.txt','w')
+f.write('qwe')
+
+#Chess.Pieces(0,'1',[0,0],[1,1]).draw()
 
 #if 1 in [1]:
 #	print 1
