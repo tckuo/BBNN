@@ -109,6 +109,7 @@ def checkwin(board):
 #	board=[[(0,'0') for i in range(7)] for j in range(7)]
 
 def showAll(nowDraw, nowCoord, board):
+	clearUp()
 	showboard(board)
 	showCoord(nowCoord)
 	showPlayer(nowDraw)

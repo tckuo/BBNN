@@ -1,3 +1,5 @@
+#bbnn.sv2 > bbnn.sav to test R to stop opponent
+
 import Chess
 from Func import *
 

@@ -1,11 +1,18 @@
 #import Chess
 from Func import *
 
-try:
-	open('ss','r')
-except IOError:
-	open('ss','w').write('a')
-print open('ss','r').read().split()
+i=[0,1]
+print i[2]
+
+#showcor={(1,'b'):'  B  ', (1,'n'):'  N  ',(1,'r'):'  R  ',
+#		 (2,'b'):' (b) ', (2,'n'):' (n) ',(0,'0'):'     ',}
+#print showcor[(1,'b')]
+
+#try:
+#	open('ss','r')
+#except IOError:
+#	open('ss','w').write('a')
+#print open('ss','r').read().split()
 
 ###Why??
 #blankboard=[[(0,'0') for i in range(7)] for j in range(7)]

@@ -7,7 +7,9 @@ board has elements as (player, 'b or n')
 # step=(column, rank)
 #board as global mem?
 board=[[(0,'0') for i in range(7)] for j in range(7)]
-order=('B','n','N','b')
+#order=('B','n','N','b')
+order={0: (1, 'b'), 1:(2, 'n'),
+	   2: (1, 'n'), 3:(2, 'b')}
 '''
 blankborad has elements as (player, 'b or n')
 '''
@@ -26,7 +28,6 @@ nowDraw = 0
 nowCoord = [0,0]
 rook = 1
 
-clearUp()
 showAll(nowDraw, nowCoord, board)
 print 'type \'H\' for Help'
 
@@ -39,13 +40,27 @@ while True:
 			for i in range(len(gameSave)):
 				f.write('%s\n'%gameSave[i])
 			f.close()
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 			inputKey=raw_input('Game saved. Please draw on a square: ')
 		elif inputKey == 'L':		#Load, not finished
-			try:
-				open("bbnn.sav", "r")
+			try: #still can not handle all the exception
+				f = open("bbnn.sav", "r")
+				test = f.read().split()
+				temp = [[0 for i in range(6)] for j in range(6)]
+				showcor={(1,'b'):'  B  ', (1,'n'):'  N  ',(1,'r'):'  R  ',
+			 			 (2,'b'):' (b) ', (2,'n'):' (n) ',(0,'0'):'     ',}
+				for i in range(len(test)):
+					showcor[(int(test[i][0]), test[i][1])]
+					temp[int(test[i][2])-1][int(test[i][2])-1]
+				f.close()
+				del temp
+				del test
+				del showcor
 			except IOError:
+				open("bbnn.sav", "w")
+			except KeyError:
+				open("bbnn.sav", "w")
+			except IndexError:
 				open("bbnn.sav", "w")
 
 			f = open("bbnn.sav", "r")
@@ -89,30 +104,36 @@ while True:
 				nowDraw = 3
 			elif move[0:2] == '2b':
 				nowDraw = 0
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 
 			del move
 			del savList
 			inputKey=raw_input('Game Loaded. Please draw on a square: ')		
 		elif inputKey == 'R':	#change to Rook
-			nextDraw = Chess.Pieces(1, 'r', nowCoord)
-			if rook==1 and nowDraw%2==0 and len(nextDraw.availMoves())!=0 and nowCoord != [0, 0]:
-				inputKey = raw_input('Now player 1 plays as Rook. Please draw on a square: ')
-				nowDraw += 4
-			elif nowCoord==[0, 0]: #1st piece
-				inputKey = raw_input('What a waste! You can not do that. Please draw on a square: ')
-			elif nowDraw%2==1: #wrong player
-				inputKey = raw_input('Wrong player. Please draw on a square: ')
-			elif rook==0: #run out of rook
-				inputKey = raw_input('You can only use Rook once per game. Please draw on a square: ')
+			if nowDraw==4:		#change back to B
+				nowDraw -= 4
+				inputKey = raw_input('Now player 1 plays as Bishop. Please draw on a square: ')
+			elif nowDraw==6:	#change back to N
+				nowDraw -= 4
+				inputKey = raw_input('Now player 1 plays as Knight. Please draw on a square: ')
 			else:
-				inputKey=raw_input('Invalid input. Please draw on a square: ')
+				nextDraw = Chess.Pieces(1, 'r', nowCoord)
+				if rook==1 and nowDraw%2==0 and len(nextDraw.availMoves())!=0 and nowCoord != [0, 0]:
+					inputKey = raw_input('Now player 1 plays as Rook. Please draw on a square: ')
+					nowDraw += 4
+				elif nowCoord==[0, 0]: #1st piece
+					inputKey = raw_input('What a waste! You can not do that. Please draw on a square: ')
+				elif nowDraw%2==1: #wrong player
+					inputKey = raw_input('Wrong player. Please draw on a square: ')
+				elif rook==0: #run out of rook
+					inputKey = raw_input('You can only use Rook once per game. Please draw on a square: ')
+				else:
+					inputKey=raw_input('Invalid input. Please draw on a square: ')
 		elif inputKey == 'B':	#take Back
 			if len(gameSave)==0:
 				inputKey=raw_input('Invalid input. Please draw on a square: ')
 			elif len(gameSave)==1:
-				movel1 = gameSave[-1]
+				movel1 = gameSave[0]
 				rmCoord = [int(movel1[2]), int(movel1[3])]
 				nowCoord = [0, 0]
 				if movel1[0:2] == '1b': #nowDraw = last move's nd + 1
@@ -128,7 +149,6 @@ while True:
 				Chess.Pieces(0, '0', [0, 0], rmCoord, board).draw()
 				gameSave.pop()
 
-				clearUp()
 				showAll(nowDraw, nowCoord, board)
 				inputKey=raw_input('Please draw on a square: ')
 			else:
@@ -160,11 +180,9 @@ while True:
 				Chess.Pieces(0, '0', [0, 0], rmCoord, board).draw()
 				gameSave.pop()
 
-				clearUp()
 				showAll(nowDraw, nowCoord, board)
 				inputKey=raw_input('Please draw on a square: ')
 		elif inputKey == 'C':	#clear up
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 			inputKey=raw_input('Please draw on a square: ')
 		elif inputKey == 'E':	#Exit
@@ -193,11 +211,9 @@ while True:
 			nextDraw.save(gameSave)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 		elif cM==0:
 			nowDraw=(nowDraw+1)%4
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 		else:
 			print 'Invalid move! The available moves are:'
@@ -210,11 +226,9 @@ while True:
 			nextDraw.save(gameSave)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 		elif cM==0:
 			nowDraw=(nowDraw+3)%4
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 		else:
 			print 'Invalid move! The available moves are:'
@@ -227,11 +241,9 @@ while True:
 			nextDraw.save(gameSave)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 		elif cM==0:
 			nowDraw=(nowDraw+1)%4
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 		else:
 			print 'Invalid move! The available moves are:'
@@ -244,11 +256,9 @@ while True:
 			nextDraw.save(gameSave)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 		elif cM==0:
 			nowDraw=(nowDraw+3)%4
-			clearUp()
 			showAll(nowDraw, nowCoord, board)
 		else:
 			print 'Invalid move! The available moves are:'
@@ -258,24 +268,32 @@ while True:
 		cM = nextDraw.checkMove()
 		if cM==1:
 			nextDraw.draw()
-			nextDraw.save(gameSave)
-			if checkwin(board) == None:
+			#nextDraw.save(gameSave)
+			if checkwin(board) == None:##not use R to win
 				nowDraw=(nowDraw+1)%4
-				nowCoord[:] = nextStep[:]
-				clearUp()
-				showAll(nowDraw, nowCoord, board)
-				rook = 0
+				#nowCoord[:] = nextStep[:]
+				#showAll(nowDraw, nowCoord, board)
+				#rook = 0
+
+				##if use R to stop p2
+				if Chess.Pieces(order[nowDraw][0], order[nowDraw][1], nextStep, [0, 0], board).checkMove()==0:
+					Chess.Pieces(0, '0', [0, 0], nextStep, board).draw()
+					#gameSave.pop()
+					nowDraw -= 1
+					showAll(nowDraw, nowCoord, board)
+					print 'Illigal move! You can not stop your opponent by Rook.'
+				else: #else: right move
+					nowCoord[:] = nextStep[:]
+					nextDraw.save(gameSave)
+					showAll(nowDraw, nowCoord, board)
+					rook = 0
 			else: #use Rook to win
 				##Erase the Rook on the board
 				Chess.Pieces(0, '0', [0, 0], nextStep, board).draw()
-				gameSave.pop()
-				print 'Illigal move! You can not win the game by Rook.'
+				#gameSave.pop()
 				nowDraw -= 4
-		#checked before
-		#elif cM==0:
-		#	nowDraw=(nowDraw+1)%4
-		#	clearUp()
-		#	showboard(board)
+				showAll(nowDraw, nowCoord, board)
+				print 'Illigal move! You can not win the game by Rook.'
 		else:
 			print 'Invalid move! The available moves are:'
 			print cM
