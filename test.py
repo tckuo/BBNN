@@ -1,7 +1,19 @@
-import Chess
+#import Chess
+from Func import *
 
-f=open('t.txt','w')
-f.write('qwe')
+##Why??
+blankboard=[[(0,'0') for i in range(7)] for j in range(7)]
+showboard(blankboard)
+board=[]
+board[:]=blankboard[:]
+showboard(board)
+board[1][1]=(1,'r')
+#Chess.Pieces(1, 'b', [0, 0], [3,3], board).draw()
+showboard(board)
+showboard(blankboard)
+
+#f=open('t.txt','w')
+#f.write('qwe')
 
 #Chess.Pieces(0,'1',[0,0],[1,1]).draw()
 

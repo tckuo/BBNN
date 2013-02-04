@@ -6,8 +6,10 @@ board has elements as (player, 'b or n')
 ###
 # step=(column, rank)
 #board as global mem?
-blankboard=[[(0,'0') for i in range(7)] for j in range(7)]
-board=blankboard[:] 
+#blankboard=[[(0,'0') for i in range(7)] for j in range(7)]
+#board=blankboard[:]
+board=[[(0,'0') for i in range(7)] for j in range(7)]
+#initBoard(board)
 order=('B','n','N','b')
 '''
 blankborad has elements as (player, 'b or n')
@@ -22,7 +24,8 @@ nowDraw=0
 ############################### Game starts here... ###########################
 
 
-board=blankboard[:]
+#board=blankboard[:]
+#initBoard(board)
 gameSave=[]
 clearUp()
 showboard(board)
@@ -46,12 +49,26 @@ while True:
 		elif inputKey == 'L':		#Load, not finished
 			f = open("bbnn.sav", "r")
 			savList = f.read().split()
-			print savList
+			#print savList
 			f.close()
 			#inputKey=raw_input('The function \'Save\' is not finished. Please draw on a square: ')
+
+			##init
+			#board = blankboard[:]
+			#initBoard(board)
+			for i in range(1,7):
+				for j in range(1,7):
+					Chess.Pieces(0, '0', [0, 0], [i, j], board).draw()
+			gameSave=[]
+
+			#load
 			for i in range(len(savList)):
 				move = savList[i]
-				Chess.Pieces(int(move[0]), move[1], [0, 0], [int(move[2]), int(move[3])], board).draw()
+				#Chess.Pieces(int(move[0]), move[1], [0, 0], [int(move[2]), int(move[3])], board).draw()
+				nextDraw = Chess.Pieces(int(move[0]), move[1], [0, 0], [int(move[2]), int(move[3])], board)
+				nextDraw.draw()
+				nextDraw.save(gameSave)
+			nowCoord = [int(move[2]), int(move[3])]
 			if move[1] == 'r':
 				move = savList[-2]
 				if move[0:2] == '1b': #nowDraw =  move's nd +1
@@ -59,7 +76,7 @@ while True:
 				elif move[0:2] == '2n':
 					nowDraw = 3
 				elif move[0:2] == '1n':
-					nowDarw = 0
+					nowDraw = 0
 				elif move[0:2] == '2b':
 					nowDraw = 1
 
@@ -68,12 +85,16 @@ while True:
 			elif move[0:2] == '2n':
 				nowDraw = 2
 			elif move[0:2] == '1n':
-				nowDarw = 3
+				nowDraw = 3
 			elif move[0:2] == '2b':
 				nowDraw = 0
 			clearUp()
 			showboard(board)
+			print savList
+			print move
+			print nowDraw
 			showPlayer(nowDraw)
+			#showboard(blankboard)
 			del move
 			del savList
 			inputKey=raw_input('Game Loaded. Please draw on a square: ')		

@@ -105,6 +105,9 @@ def checkwin(board):
 					else:
 						return player
 
+#def initBoard(board):
+#	board=[[(0,'0') for i in range(7)] for j in range(7)]
+
 def showboard(board):   # board has elements as (player, 'b or n')
 	#lastcor={(1,'b'):'  B* ',(1,'n'):'  N* ',(2,'b'):' (b)*',(2,'n'):' (n)*'}
 	#showcor={(0,'0'):'     ',(1,'b'):'  B  ',
