@@ -1,4 +1,5 @@
 #bbnn.sv2 > bbnn.sav to test R to stop opponent
+#bbnn.sv3 > bbnn.sav to test R when B, N can not be used
 
 import Chess
 from Func import *

@@ -8,8 +8,10 @@ board has elements as (player, 'b or n')
 #board as global mem?
 board=[[(0,'0') for i in range(7)] for j in range(7)]
 #order=('B','n','N','b')
-order={0: (1, 'b'), 1:(2, 'n'),
-	   2: (1, 'n'), 3:(2, 'b')}
+##order: draw: (player, piece, skip-add-num)
+order={0: (1, 'b', 1), 1:(2, 'n', 3),
+	   2: (1, 'n', 1), 3:(2, 'b', 3),
+	   4: (1, 'r', 1), 6:(1, 'r', 3)}
 '''
 blankborad has elements as (player, 'b or n')
 '''
@@ -27,22 +29,131 @@ gameSave=[]
 nowDraw = 0
 nowCoord = [0,0]
 rook = 1
+game = True
 
 showAll(nowDraw, nowCoord, board)
 print 'type \'H\' for Help'
 
-while True:
+while game:
+	#check: have available move or not
+	if Chess.Pieces(order[nowDraw][0], order[nowDraw][1], nowCoord, [0, 0], board).checkMove()==0:
+		#for P1 still has R and can move with R, make a choice
+		if rook==1 and nowDraw in [0, 2]:
+			if Chess.Pieces(1, 'r', nowCoord, [0, 0], board).checkMove()==0:
+				print 'No available move. Skip this turn.'
+				nowDraw = (nowDraw+order[nowDraw][2])%4
+				showPlayer(nowDraw)
+			else:
+				inputKey = raw_input('Enter \'Y\' to use Rook, else key to give up.')
+				if inputKey=='Y':
+					nowDraw += 4
+					showPlayer(nowDraw)
+				else:
+					print 'No available move. Skip this turn.'
+					nowDraw = (nowDraw+order[nowDraw][2])%4
+					showPlayer(nowDraw)
+		else: #if no R to use
+			print 'No available move. Skip this turn.'
+			nowDraw = (nowDraw+order[nowDraw][2])%4
+			showPlayer(nowDraw)
+
+		#After skip once, if still has no available moves => This game is drawn
+		if Chess.Pieces(order[nowDraw][0], order[nowDraw][1], nowCoord, [0, 0], board).checkMove()==0:
+			#for P1 still has R and can move with R, make a choice
+			if rook==1 and nowDraw in [0, 2]:
+				if Chess.Pieces(1, 'r', nowCoord, [0, 0], board).checkMove()==0:
+					print 'Still no available move. Skip this turn.'
+					print 'This game is drawn.'
+					break
+				else:
+					inputKey = raw_input('Enter \'Y\' to use Rook, else key to give up.')
+					if inputKey=='Y':
+						nowDraw += 4
+						showPlayer(nowDraw)
+					else:
+						print 'Still no available move. Skip this turn.'
+						print 'This game is drawn.'
+						break
+			else: #if no R to use
+				print 'Still no available move. Skip this turn.'
+				print 'This game is drawn.'
+				break
+	
 	inputKey=raw_input('Please draw on a square: ')
 	check = 1
 	while check == 1:
-		if inputKey == 'S':		#Save
-			f = open("bbnn.sav", "w")
-			for i in range(len(gameSave)):
-				f.write('%s\n'%gameSave[i])
-			f.close()
+		if inputKey == 'B':	#take Back
+			if len(gameSave)==0:
+				inputKey=raw_input('Invalid input. Please draw on a square: ')
+			elif len(gameSave)==1:
+				movel1 = gameSave[0]
+				rmCoord = [int(movel1[2]), int(movel1[3])]
+				nowCoord = [0, 0]
+				if movel1[0:2] == '1b': #nowDraw = last move's nd + 1
+					nowDraw = 0
+				elif movel1[0:2] == '2n':
+					nowDraw = 1
+				elif movel1[0:2] == '1n':
+					nowDraw = 2
+				elif movel1[0:2] == '2b':
+					nowDraw = 3
+				#erase last move
+				del movel1
+				Chess.Pieces(0, '0', [0, 0], rmCoord, board).draw()
+				gameSave.pop()
+
+				showAll(nowDraw, nowCoord, board)
+				inputKey=raw_input('Please draw on a square: ')
+			else:
+				movel1 = gameSave[-1]
+				movel2 = gameSave[-2]
+				rmCoord = [int(movel1[2]), int(movel1[3])]
+				nowCoord = [int(movel2[2]), int(movel2[3])]
+				if movel1[1] == 'r':
+					rook = 1
+					if movel2[0:2] == '1b':
+						nowDraw = 1
+					elif movel2[0:2] == '2n':
+						nowDraw = 2
+					elif movel2[0:2] == '1n':
+						nowDraw = 3
+					elif movel2[0:2] == '2b':
+						nowDraw = 0
+				elif movel1[0:2] == '1b': #nowDraw = last move's nd + 1
+					nowDraw = 0
+				elif movel1[0:2] == '2n':
+					nowDraw = 1
+				elif movel1[0:2] == '1n':
+					nowDraw = 2
+				elif movel1[0:2] == '2b':
+					nowDraw = 3
+				#erase last move
+				del movel1
+				del movel2
+				Chess.Pieces(0, '0', [0, 0], rmCoord, board).draw()
+				gameSave.pop()
+
+				showAll(nowDraw, nowCoord, board)
+				inputKey=raw_input('Please draw on a square: ')
+		elif inputKey == 'C':	#clear up
 			showAll(nowDraw, nowCoord, board)
-			inputKey=raw_input('Game saved. Please draw on a square: ')
+			inputKey=raw_input('Please draw on a square: ')
+		elif inputKey == 'E':	#Exit
+			game = False
+			break
+			#inputKey=raw_input('The function \'Exit\' is not finished. Please draw on a square: ')
+		elif inputKey == 'H':	#Help
+			print "'B': take Back"
+			print "'C': Clear up the screen"
+			print "'E': Exit the game"
+			print "'L': Load the game"
+			print "'R': For player 1 to use the Rook"
+			print "'S': Save the game"
+			inputKey=raw_input('Please draw on a square: ')
 		elif inputKey == 'L':		#Load, not finished
+			#!!!!!!!!!!!!
+			#There is a defect that when the loaded game's last move will skip the next move
+			#But still can play
 			try: #still can not handle all the exception
 				f = open("bbnn.sav", "r")
 				test = f.read().split()
@@ -129,66 +240,18 @@ while True:
 					inputKey = raw_input('You can only use Rook once per game. Please draw on a square: ')
 				else:
 					inputKey=raw_input('Invalid input. Please draw on a square: ')
-		elif inputKey == 'B':	#take Back
-			if len(gameSave)==0:
-				inputKey=raw_input('Invalid input. Please draw on a square: ')
-			elif len(gameSave)==1:
-				movel1 = gameSave[0]
-				rmCoord = [int(movel1[2]), int(movel1[3])]
-				nowCoord = [0, 0]
-				if movel1[0:2] == '1b': #nowDraw = last move's nd + 1
-					nowDraw = 0
-				elif movel1[0:2] == '2n':
-					nowDraw = 1
-				elif movel1[0:2] == '1n':
-					nowDraw = 2
-				elif movel1[0:2] == '2b':
-					nowDraw = 3
-				#erase last move
-				del movel1
-				Chess.Pieces(0, '0', [0, 0], rmCoord, board).draw()
-				gameSave.pop()
-
-				showAll(nowDraw, nowCoord, board)
-				inputKey=raw_input('Please draw on a square: ')
-			else:
-				movel1 = gameSave[-1]
-				movel2 = gameSave[-2]
-				rmCoord = [int(movel1[2]), int(movel1[3])]
-				nowCoord = [int(movel2[2]), int(movel2[3])]
-				if movel1[1] == 'r':
-					rook = 1
-					if movel2[0:2] == '1b':
-						nowDraw = 1
-					elif movel2[0:2] == '2n':
-						nowDraw = 2
-					elif movel2[0:2] == '1n':
-						nowDraw = 3
-					elif movel2[0:2] == '2b':
-						nowDraw = 0
-				elif movel1[0:2] == '1b': #nowDraw = last move's nd + 1
-					nowDraw = 0
-				elif movel1[0:2] == '2n':
-					nowDraw = 1
-				elif movel1[0:2] == '1n':
-					nowDraw = 2
-				elif movel1[0:2] == '2b':
-					nowDraw = 3
-				#erase last move
-				del movel1
-				del movel2
-				Chess.Pieces(0, '0', [0, 0], rmCoord, board).draw()
-				gameSave.pop()
-
-				showAll(nowDraw, nowCoord, board)
-				inputKey=raw_input('Please draw on a square: ')
-		elif inputKey == 'C':	#clear up
+		elif inputKey == 'S':		#Save
+			f = open("bbnn.sav", "w")
+			for i in range(len(gameSave)):
+				f.write('%s\n'%gameSave[i])
+			f.close()
 			showAll(nowDraw, nowCoord, board)
-			inputKey=raw_input('Please draw on a square: ')
-		elif inputKey == 'E':	#Exit
-			inputKey=raw_input('The function \'Exit\' is not finished. Please draw on a square: ')
-		elif inputKey == 'H':	#Help
-			inputKey=raw_input('The function \'Help\' is not finished. Please draw on a square: ')
+			inputKey=raw_input('Game saved. Please draw on a square: ')
+		##BONUS!!!
+		elif inputKey == 'WIN':
+			game = 0
+			print "Player %d wins!"%(nowDraw%2+1)
+			break
 		elif len(inputKey) != 2:
 			inputKey=raw_input('Invalid input. Please draw on a square: ')
 		else:
@@ -201,6 +264,11 @@ while True:
 					inputKey=raw_input('Input out of index. Please draw on a square: ')
 			except ValueError:
 				inputKey=raw_input('Invalid input. Please draw on a square: ')
+	
+	##Exit part 2
+	if not game:
+		print 'Thanks for your playing'
+		break
 
 	nextStep = [int(inputKey[0]),int(inputKey[1])]
 	if nowDraw==0:
