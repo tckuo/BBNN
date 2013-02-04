@@ -108,6 +108,11 @@ def checkwin(board):
 #def initBoard(board):
 #	board=[[(0,'0') for i in range(7)] for j in range(7)]
 
+def showAll(nowDraw, nowCoord, board):
+	showboard(board)
+	showCoord(nowCoord)
+	showPlayer(nowDraw)
+
 def showboard(board):   # board has elements as (player, 'b or n')
 	#lastcor={(1,'b'):'  B* ',(1,'n'):'  N* ',(2,'b'):' (b)*',(2,'n'):' (n)*'}
 	#showcor={(0,'0'):'     ',(1,'b'):'  B  ',
@@ -129,6 +134,12 @@ def showboard(board):   # board has elements as (player, 'b or n')
 				+'\n\t \'-----\'-----\'-----\'-----\'-----\'-----\''
 				+'\n\t    1     2     3     4     5     6    ')
 	print boardgraph
+
+def showCoord(coord):
+	if coord==[0,0]:
+		print 'First Move.'
+	else:
+		print 'Last move: (%d, %d)'%(coord[0], coord[1])
 
 def showPlayer(nowDraw):
 	if nowDraw == 0:

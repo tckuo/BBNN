@@ -6,7 +6,10 @@ board has elements as (player, 'b or n')
 ###
 # step=(column, rank)
 #board as global mem?
+#blankboard=[[(0,'0') for i in range(7)] for j in range(7)]
+#board=blankboard[:]
 board=[[(0,'0') for i in range(7)] for j in range(7)]
+#initBoard(board)
 order=('B','n','N','b')
 '''
 blankborad has elements as (player, 'b or n')
@@ -21,6 +24,8 @@ nowDraw=0
 ############################### Game starts here... ###########################
 
 
+#board=blankboard[:]
+#initBoard(board)
 gameSave=[]
 nowDraw = 0
 nowCoord = [0,0]
@@ -28,47 +33,47 @@ rook = 1
 
 clearUp()
 showAll(nowDraw, nowCoord, board)
+#showboard(board)
+#showPlayer(nowDraw)
 print 'type \'H\' for Help'
 
 while True:
+	#showPlayer(nowDraw)
 	inputKey=raw_input('Please draw on a square: ')
 	check = 1
 	while check == 1:
 		if inputKey == 'S':		#Save
+			#print gameSave
 			f = open("bbnn.sav", "w")
 			for i in range(len(gameSave)):
 				f.write('%s\n'%gameSave[i])
 			f.close()
-			clearUp()
-			showAll(nowDraw, nowCoord, board)
+			#inputKey=raw_input('The function \'Save\' is not finished. Please draw on a square: ')
 			inputKey=raw_input('Game saved. Please draw on a square: ')
 		elif inputKey == 'L':		#Load, not finished
-			try:
-				open("bbnn.sav", "r")
-			except IOError:
-				open("bbnn.sav", "w")
-
 			f = open("bbnn.sav", "r")
 			savList = f.read().split()
+			#print savList
 			f.close()
+			#inputKey=raw_input('The function \'Save\' is not finished. Please draw on a square: ')
 
-			#init
+			##init
+			#board = blankboard[:]
+			#initBoard(board)
 			for i in range(1,7):
 				for j in range(1,7):
 					Chess.Pieces(0, '0', [0, 0], [i, j], board).draw()
 			gameSave=[]
 
-			#for the case that no record
-			move='2b00'
 			#load
 			for i in range(len(savList)):
 				move = savList[i]
 				if move[1]=='r': #use rook
 					rook = 0
+				#Chess.Pieces(int(move[0]), move[1], [0, 0], [int(move[2]), int(move[3])], board).draw()
 				nextDraw = Chess.Pieces(int(move[0]), move[1], [0, 0], [int(move[2]), int(move[3])], board)
 				nextDraw.draw()
 				nextDraw.save(gameSave)
-
 			nowCoord = [int(move[2]), int(move[3])]
 			if move[1] == 'r':
 				move = savList[-2]
@@ -91,11 +96,17 @@ while True:
 				nowDraw = 0
 			clearUp()
 			showAll(nowDraw, nowCoord, board)
-
+			#showboard(board)
+			#showPlayer(nowDraw)
+			#print savList
+			#print move
+			#print nowDraw
+			#showboard(blankboard)
 			del move
 			del savList
 			inputKey=raw_input('Game Loaded. Please draw on a square: ')		
 		elif inputKey == 'R':	#change to Rook
+			#inputKey=raw_input('The function \'Rook\' is not finished. Please draw on a square: ')
 			nextDraw = Chess.Pieces(1, 'r', nowCoord)
 			if rook==1 and nowDraw%2==0 and len(nextDraw.availMoves())!=0 and nowCoord != [0, 0]:
 				inputKey = raw_input('Now player 1 plays as Rook. Please draw on a square: ')
@@ -130,6 +141,8 @@ while True:
 
 				clearUp()
 				showAll(nowDraw, nowCoord, board)
+				#showboard(board)
+				#showPlayer(nowDraw)
 				inputKey=raw_input('Please draw on a square: ')
 			else:
 				movel1 = gameSave[-1]
@@ -162,10 +175,14 @@ while True:
 
 				clearUp()
 				showAll(nowDraw, nowCoord, board)
+				#showboard(board)
+				#showPlayer(nowDraw)
 				inputKey=raw_input('Please draw on a square: ')
 		elif inputKey == 'C':	#clear up
 			clearUp()
 			showAll(nowDraw, nowCoord, board)
+			#showboard(board)
+			#showPlayer(nowDraw)
 			inputKey=raw_input('Please draw on a square: ')
 		elif inputKey == 'E':	#Exit
 			inputKey=raw_input('The function \'Exit\' is not finished. Please draw on a square: ')
@@ -191,14 +208,19 @@ while True:
 		if cM==1:
 			nextDraw.draw()
 			nextDraw.save(gameSave)
+			#drawb(1, nextStep, board)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
 			clearUp()
 			showAll(nowDraw, nowCoord, board)
+			#showboard(board)
+			#showPlayer(nowDraw)
 		elif cM==0:
 			nowDraw=(nowDraw+1)%4
 			clearUp()
 			showAll(nowDraw, nowCoord, board)
+			#showboard(board)
+			#showPlayer(nowDraw)
 		else:
 			print 'Invalid move! The available moves are:'
 			print cM
@@ -208,14 +230,19 @@ while True:
 		if cM==1:
 			nextDraw.draw()
 			nextDraw.save(gameSave)
+			#drawn(2, nextStep, board)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
 			clearUp()
 			showAll(nowDraw, nowCoord, board)
+			#showboard(board)
+			#showPlayer(nowDraw)
 		elif cM==0:
 			nowDraw=(nowDraw+3)%4
 			clearUp()
 			showAll(nowDraw, nowCoord, board)
+			#showboard(board)
+			#showPlayer(nowDraw)
 		else:
 			print 'Invalid move! The available moves are:'
 			print cM
@@ -225,14 +252,19 @@ while True:
 		if cM==1:
 			nextDraw.draw()
 			nextDraw.save(gameSave)
+			#drawn(1, nextStep, board)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
 			clearUp()
 			showAll(nowDraw, nowCoord, board)
+			#showboard(board)
+			#showPlayer(nowDraw)
 		elif cM==0:
 			nowDraw=(nowDraw+1)%4
 			clearUp()
 			showAll(nowDraw, nowCoord, board)
+			#showboard(board)
+			#showPlayer(nowDraw)
 		else:
 			print 'Invalid move! The available moves are:'
 			print cM
@@ -242,14 +274,19 @@ while True:
 		if cM==1:
 			nextDraw.draw()
 			nextDraw.save(gameSave)
+			#drawb(2, nextStep, board)
 			nowDraw=(nowDraw+1)%4
 			nowCoord[:] = nextStep[:]
 			clearUp()
 			showAll(nowDraw, nowCoord, board)
+			#showboard(board)
+			#showPlayer(nowDraw)
 		elif cM==0:
 			nowDraw=(nowDraw+3)%4
 			clearUp()
 			showAll(nowDraw, nowCoord, board)
+			#showboard(board)
+			#showPlayer(nowDraw)
 		else:
 			print 'Invalid move! The available moves are:'
 			print cM
@@ -264,9 +301,13 @@ while True:
 				nowCoord[:] = nextStep[:]
 				clearUp()
 				showAll(nowDraw, nowCoord, board)
+				#showboard(board)
+				#showPlayer(nowDraw)
 				rook = 0
 			else: #use Rook to win
 				##Erase the Rook on the board
+				#nextDraw = Chess.Pieces(0, '0', [0, 0], nextStep, board)
+				#nextDraw.draw()
 				Chess.Pieces(0, '0', [0, 0], nextStep, board).draw()
 				gameSave.pop()
 				print 'Illigal move! You can not win the game by Rook.'
@@ -281,6 +322,8 @@ while True:
 			print cM
 	else:
 		break
+	#clearUp()
+	#showboard(board)
 	if checkwin(board) != None:
 		clearUp()
 		showboard(board)

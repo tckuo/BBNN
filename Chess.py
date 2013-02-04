@@ -147,5 +147,5 @@ class Pieces:
 		self.board[self.nextStep[0]][self.nextStep[1]] = (self.player, self.nextKind)
 	def save(self, savList):
 		savList.append('%d%s%d%d'%(self.player, self.nextKind, self.nextStep[0], self.nextStep[1]))
-	def delSave(self, savList):
-		savList.pop(len(savList) - 1)
+#	def delSave(self, savList):
+#		savList.pop(len(savList) - 1)
